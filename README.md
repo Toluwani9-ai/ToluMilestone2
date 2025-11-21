@@ -1,22 +1,18 @@
-Travel Journal Sensors - Milestone 2
-This Android app demonstrates the use of GPS and Accelerometer sensors using Kotlin and Jetpack Compose.
+Travel Journal Sensors – Milestone 2
+
+My project demonstrates the use of the GPS and Accelerometer sensors in an Android application built with Kotlin and Jetpack Compose. my goal of Milestone 2 is to read live sensor data and display it through a clean and simple user interface.
 
 Features
-  • GPS tracking with real-time updates
-  • Motion tracking using accelerometer values
-  • Clean Jetpack Compose Ul
-  • Multi-screen navigation
-  • Runtime permission handling
+	•	GPS Tracking
+	•	Real-time Latitude, Longitude, and Accuracy
+	•	Uses FusedLocationProviderClient for reliable updates
+	•	Runtime permission handling included
 
-Technologies
-  • Kotlin
-  • Jetpack Compose
-  • FusedLocationProviderClient
-  • SensorManager (Accelerometer)
-  • Material 3 Design
+  Motion Tracking (Accelerometer)
+	•	Reads X, Y, and Z axis values
+	•	Calculates and displays movement strength
+	•	Sensor updates in real time
 
-How to Run
-1. Open project in Android Studio
-2. Build & run on emulator or physical device
-3. Test GPS using emulator's Location controls
-4. Test Motion using emulator's Sensor → Accelerometer controls
+  Interface & Navigation
+	•	Modern Jetpack Compose UI
+	•	Simple navigation between Welcome, GPS, and Motion screens
