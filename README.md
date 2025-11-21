@@ -16,3 +16,16 @@ Features
   Interface & Navigation
 	•	Modern Jetpack Compose UI
 	•	Simple navigation between Welcome, GPS, and Motion screens
+
+Technologies Used
+	•	Kotlin
+	•	Jetpack Compose
+	•	FusedLocationProviderClient (GPS)
+	•	SensorManager (Accelerometer)
+	•	Material 3
+
+How to Run
+	1.	Open the project in Android Studio
+	2.	Run the app on an emulator or a physical device
+	3.	Test GPS by using:Extended Controls → Location → Set location
+	4.	Test Motion using:Extended Controls → Sensors → Accelerometer
