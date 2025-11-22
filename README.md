@@ -3,7 +3,10 @@ My project demonstrates the use of the GPS and Accelerometer sensors in an Andro
 
 Features
 GPS Tracking
-Real-time Latitude, Longitude, and Accuracy
+
+Real-time Latitude
+Longitude
+Accuracy
 Uses FusedLocationProviderClient for reliable updates
 Runtime permission handling included
 
