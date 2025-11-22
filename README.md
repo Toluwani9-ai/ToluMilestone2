@@ -1,27 +1,3 @@
-Milestone 2: Sensor Integration
-My project demonstrates the use of the GPS and Accelerometer sensors in an Android application built with Kotlin and Jetpack Compose. My goal for Milestone 2 is to read live sensor data and display it through a clean and simple user interface.
-
-Features
-GPS Tracking
-
-Real-time Latitude
-Longitude
-Accuracy
-Uses FusedLocationProviderClient for reliable updates
-Runtime permission handling included
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Travel Journal Sensors – Milestone 2
 
