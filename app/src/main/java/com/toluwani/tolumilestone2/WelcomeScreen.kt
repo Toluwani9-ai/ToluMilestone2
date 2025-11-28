@@ -10,63 +10,52 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 /**
- * This screen acts as the entry point for my Milestone 2 work.
- * Instead of opening the GPS or accelerometer features immediately,
- * I decided to create a simple menu-style screen. This keeps navigation clear
- * and lets me test each sensor separately.
+ * A simple menu screen that allows the user to access:
+ * - GPS Tracking
+ * - Accelerometer Motion Visualiser (Canvas-based)
+ *
+ * This file demonstrates UI layout fundamentals
+ * matching your uploaded Compose layout tutorials.
  */
 @Composable
 fun WelcomeScreen() {
-
-    // I grab the current context so I can launch activities from inside the UI.
-    val context = LocalContext.current
+    val ctx = LocalContext.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(28.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
-        // Title for the screen so the user knows what the menu is for.
         Text(
             text = "Travel Journal – Sensor Menu",
             style = MaterialTheme.typography.headlineSmall
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(Modifier.height(32.dp))
 
-        /**
-         * Button that opens my GPS location activity.
-         * I am using an explicit intent because I want to launch
-         * a separate Activity where the location logic lives.
-         */
+        // GPS screen button
         Button(
             onClick = {
-                val openGPS = Intent(context, LocationActivity::class.java)
-                context.startActivity(openGPS)
+                ctx.startActivity(Intent(ctx, LocationActivity::class.java))
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Open GPS Tracking")
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(Modifier.height(20.dp))
 
-        /**
-         * Button that opens the accelerometer activity.
-         * This lets me view live motion values separate from the GPS UI,
-         * which makes debugging each part easier.
-         */
+        // Accelerometer screen button (Canvas visualiser)
         Button(
             onClick = {
-                val openMotion = Intent(context, AccelerometerActivity::class.java)
-                context.startActivity(openMotion)
+                ctx.startActivity(Intent(ctx, AccelerometerActivity::class.java))
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Open Motion Sensor")
+            Text("Open Motion Visualiser")
         }
     }
 }

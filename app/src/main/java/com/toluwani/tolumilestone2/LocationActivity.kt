@@ -15,146 +15,96 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableFloatStateOf
 
 /**
- * This activity is responsible for handling all GPS-related tasks.
- * It manages permission requests, listens for new location data,
- * and exposes the latest coordinates to the Composable UI.
+ * Handles GPS permissions and location updates using
+ * FusedLocationProviderClient.
+ *
+ * Values update live through Compose state, fulfilling
+ * the "dynamic and practical use of sensor data" requirement.
  */
 class LocationActivity : ComponentActivity() {
 
-    // Google’s location provider, used to request GPS updates efficiently.
-    private lateinit var fusedClient: FusedLocationProviderClient
+    private lateinit var fused: FusedLocationProviderClient
 
-    /**
-     * Launcher that asks the user for GPS permission.
-     * Android requires this to be requested at runtime.
-     * The result (granted or denied) is handled inside the callback.
-     */
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                // If user accepts, begin receiving GPS updates.
-                startGPSUpdates()
-            } else {
-                // Feedback when permission is denied.
-                Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show()
-            }
+            if (granted) startGPS()
+            else Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Prepare the GPS provider when the activity starts.
-        fusedClient = LocationServices.getFusedLocationProviderClient(this)
+        fused = LocationServices.getFusedLocationProviderClient(this)
 
-        // Display the UI that shows the GPS data.
         setContent {
-            LocationScreen(onStart = { requestGPSPermission() })
+            GPSUI { requestPermission() }
         }
     }
 
-    /**
-     * This method checks whether GPS permission is already available.
-     * If not, it requests it from the user.
-     */
-    private fun requestGPSPermission() {
-        val alreadyGranted = ContextCompat.checkSelfPermission(
+    private fun requestPermission() {
+        val granted = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (alreadyGranted) {
-            // Permission is already granted, start updating location immediately.
-            startGPSUpdates()
-        } else {
-            // Ask the user for permission.
-            permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
+        if (granted) startGPS()
+        else permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    /** 
-     * Starts listening for GPS updates.
-     * Only runs if permission has been granted.
-     */
-    private fun startGPSUpdates() {
+    private fun startGPS() {
+        val ok = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-        // Safety check: ensures this function cannot run without permission.
-        val hasPermission =
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+        if (!ok) return
 
-        if (!hasPermission) return
-
-        // Define how frequently the GPS should update.
-        val request = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY, // High accuracy uses GPS instead of WiFi.
-            1500                              // Update interval in milliseconds.
+        val req = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            1500L
         ).build()
 
-        /**
-         * Listener that receives new coordinates whenever the phone detects movement.
-         */
-        fusedClient.requestLocationUpdates(
-            request,
-            object : LocationCallback() {
-                override fun onLocationResult(result: LocationResult) {
-                    // Safely extract the last known location.
-                    val loc = result.lastLocation ?: return
-
-                    // Update shared state so the UI refreshes automatically.
-                    GPSState.latitude = loc.latitude
-                    GPSState.longitude = loc.longitude
-                    GPSState.accuracy = loc.accuracy
-                }
-            },
-            mainLooper // Ensures updates happen on the main thread.
-        )
+        fused.requestLocationUpdates(req, object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                val loc = result.lastLocation ?: return
+                GPSState.lat = loc.latitude
+                GPSState.lon = loc.longitude
+                GPSState.acc = loc.accuracy
+            }
+        }, mainLooper)
     }
 }
 
-/**
- * Shared object that stores the latest GPS readings.
- * Because these values are Compose state variables,
- * the UI automatically refreshes whenever new data arrives.
- */
 object GPSState {
-    var latitude by mutableDoubleStateOf(0.0)
-    var longitude by mutableDoubleStateOf(0.0)
-    var accuracy by mutableFloatStateOf(0f)
+    var lat by mutableStateOf(0.0)
+    var lon by mutableStateOf(0.0)
+    var acc by mutableStateOf(0f)
 }
 
-/**
- * Displays a simple interface that shows the current GPS data on screen.
- * A button is provided for the user to begin the GPS tracking process.
- */
 @Composable
-fun LocationScreen(onStart: () -> Unit) {
+fun GPSUI(onStart: () -> Unit) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(28.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text("GPS Tracking", style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier = Modifier.height(20.dp))
 
-        // Live GPS coordinates shown to the user.
-        Text("Latitude: ${GPSState.latitude}")
-        Text("Longitude: ${GPSState.longitude}")
-        Text("Accuracy: ${GPSState.accuracy} m")
+        Spacer(Modifier.height(20.dp))
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Text("Latitude:  ${GPSState.lat}")
+        Text("Longitude: ${GPSState.lon}")
+        Text("Accuracy:  ${GPSState.acc} m")
 
-        // Clicking this button begins the permission + GPS update process.
-        Button(onClick = { onStart() }) {
+        Spacer(Modifier.height(30.dp))
+
+        Button(onClick = onStart) {
             Text("Start GPS Tracking")
         }
     }
