@@ -75,7 +75,7 @@ class LocationActivity : ComponentActivity() {
         }
     }
 
-    /**
+    /** 
      * Starts listening for GPS updates.
      * Only runs if permission has been granted.
      */
