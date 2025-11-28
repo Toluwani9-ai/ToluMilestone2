@@ -21,8 +21,8 @@ User Interface & Navigation
 -	Built entirely with Jetpack Compose
 -	Uses Material 3 for a clean and modern design
 -	Simple navigation menu linking to:
-o	GPS Tracking Screen
-o	Motion Visualiser Screen
+  GPS Tracking Screen, and
+ 	Motion Visualiser Screen
 -	Layout centered and spaced for readability across devices
 
 Technologies Used
