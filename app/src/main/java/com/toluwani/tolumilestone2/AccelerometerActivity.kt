@@ -120,7 +120,7 @@ fun AccelerometerScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Screen title
+        // Scr een title
         Text(
             text = "Motion Tracking",
             style = MaterialTheme.typography.headlineSmall
