@@ -11,6 +11,20 @@ Features
 -	Automatically refreshes when new location data arrives
 -	Includes full runtime permission handling for ACCESS_FINE_LOCATION
 
+Motion Tracking (Accelerometer + Visualiser)
+-	Reads live X, Y, and Z accelerometer values
+-	Calculates movement strength using vector magnitude
+-	Visualises phone motion on a Canvas using a smooth animated dot
+-	Demonstrates practical use of custom drawing and gesture-based interact
+
+User Interface & Navigation
+-	Built entirely with Jetpack Compose
+-	Uses Material 3 for a clean and modern design
+-	Simple navigation menu linking to:
+o	GPS Tracking Screen
+o	Motion Visualiser Screen
+-	Layout centered and spaced for readability across devices
+
 Technologies Used
 -	Kotlin
 -	Jetpack Compose
